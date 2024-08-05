@@ -16,7 +16,7 @@ We recommend running the code in WSL2:
 Clone the repository (requires git):
 
 ```bash
-git clone https://github.com/prs-eth/Marigold.git
+git clone https://github.com/AnshShah3009/MetricGold.git
 cd Marigold
 ```
 
