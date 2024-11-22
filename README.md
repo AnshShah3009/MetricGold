@@ -6,6 +6,8 @@ We build upon the Marigold pipeline which predicts Monocular Relative Depth and 
 function used for Augmentation : D_aug = log(D / D_min) / log(D_max / D_min)
 Inverse to get back the metric depth : D = e^(D_aug,
 
+# TODO Update Repo Installation
+
 We recommend running the code in WSL2:
 
 1. Install WSL following [installation guide](https://learn.microsoft.com/en-us/windows/wsl/install#install-wsl-command).
