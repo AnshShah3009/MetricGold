@@ -1,18 +1,11 @@
 # MetricGold: Repurposing Diffusion-Based Image Generators for Monocular Metric Depth Estimation
-[[Arxiv]](https://arxiv.org/abs/2411.10886), The paper needs a lot of updates to complete, but the root idea is expressed.
+[[Arxiv]](https://arxiv.org/abs/2411.10886), Paper will be updated soon with more information and tables.
 
-We build upon the Marigold pipeline which predicts Monocular Relative Depth and train that pipeline for Log Scaled Monocular Metric Depth taking inspiration from DMD(Diffusion Models for Metric Depth). The idea is that we augment the metric depth in such a fashion that the VAE reconstruction is good and there's little need to finetune the VAE. Now we can leverage the LDM pipeline to finetune a model which predicts Metric Depth. All you need to do is a inverse of a simple function. We also aligned with the hypothesis of the Depth Anything V2 paper which states that Photorealistic Synthetic Data is better as Real data has sensor noise even when it has been preprocessed. Simulators can help us have a good initilisation and data redistillation like the SAM paper can improve the performance of our model due to domain expansion caused by distillation. We did not have the resources to get to the second step of the project where we pseudo label and retrain the model. But the idea was the same.
+We build upon the Marigold pipeline which predicts Monocular Relative Depth and train that pipeline for Log Scaled Monocular Metric Depth taking inspiration from DMD(Diffusion Models for Metric Depth). The idea is that we augment the metric depth in such a fashion that the VAE reconstruction is good and there's little need to finetune the VAE. Now we can leverage the LDM pipeline to finetune a model which predicts Metric Depth. All you need to do is a inverse of the log normalization function. We also aligned with the hypothesis of the Depth Anything V2, which states that Photorealistic Synthetic Data lacks sensor noise and biases and is better as Real data has sensor noise even when it has been preprocessed. Simulators can help us have a good initilisation and data redistillation like the SAM paper can improve the performance of our model due to domain expansion caused by distillation. Due to resource limitation we did not complete the second step of the Depth Anything v2 training reicipe where we pseudo label and retrain the model on a larger dataset.
 
-function used for Augmentation : D_aug = log(D / D_min) / log(D_max / D_min)
-Inverse to get back the metric depth : D = e^(D_aug,
+function used for normalisation : D_aug = log(D / D_min) / log(D_max / D_min)
 
 # TODO Update Repo Installation
-
-We recommend running the code in WSL2:
-
-1. Install WSL following [installation guide](https://learn.microsoft.com/en-us/windows/wsl/install#install-wsl-command).
-1. Install CUDA support for WSL following [installation guide](https://docs.nvidia.com/cuda/wsl-user-guide/index.html#cuda-support-for-wsl-2).
-1. Find your drives in `/mnt/<drive letter>/`; check [WSL FAQ](https://learn.microsoft.com/en-us/windows/wsl/faq#how-do-i-access-my-c--drive-) for more details. Navigate to the working directory of choice. 
 
 ### 📦 Repository
 
@@ -20,7 +13,7 @@ Clone the repository (requires git):
 
 ```bash
 git clone https://github.com/AnshShah3009/MetricGold.git
-cd Marigold
+cd MetricGold
 ```
 
 ### 💻 Dependencies
@@ -36,8 +29,8 @@ We provide several ways to install the dependencies.
     Create the environment and install dependencies into it:
 
     ```bash
-    mamba env create -n marigold --file environment.yaml
-    conda activate marigold
+    mamba env create -n metricgold --file environment.yaml
+    conda activate metricgold
     ```
 
 2. **Using pip:** 
@@ -61,27 +54,6 @@ Activate the environment again after restarting the terminal session.
     ```bash
     bash script/download_sample_data.sh
     ```
-
-1. Or place your images in a directory, for example, under `input/in-the-wild_example`, and run the following inference command.
-
-```bash
- python run.py \
-     --input_rgb_dir input/in-the-wild_example \
-     --output_dir output/in-the-wild_example_lcm
- ```
-
-### 🎮 Run inference with DDIM (paper setting)
-
-This setting corresponds to our paper. For academic comparison, please run with this setting.
-
-```bash
-python run.py \
-    --checkpoint prs-eth/Train_MetricGold \
-    --denoise_steps 50 \
-    --ensemble_size 10 \
-    --input_rgb_dir input/in-the-wild_example \
-    --output_dir output/in-the-wild_example
-```
 
 You can find all results in `output/in-the-wild_example`. Enjoy!
 
@@ -114,57 +86,6 @@ The `HF_HOME` environment variable defines its location and can be overridden, e
 export HF_HOME=$(pwd)/cache
 ```
 
-At inference, specify the checkpoint path:
-
-```bash
-python run.py \
-    --checkpoint checkpoint/marigold-v1-0 \
-    --denoise_steps 50 \
-    --ensemble_size 10 \
-    --input_rgb_dir input/in-the-wild_example\
-    --output_dir output/in-the-wild_example
-```
-
-## 🦿 Evaluation on test datasets <a name="evaluation"></a>
-
-Install additional dependencies:
-
-```bash
-pip install -r requirements+.txt -r requirements.txt
-```
-```bash
-export BASE_DATA_DIR=<YOUR_DATA_DIR>  # Set target data directory
-
-wget -r -np -nH --cut-dirs=4 -R "index.html*" -P ${BASE_DATA_DIR} https://share.phys.ethz.ch/~pf/bingkedata/marigold/evaluation_dataset/
-```
-
-Run inference and evaluation scripts, for example:
-
-```bash
-# Run inference
-bash script/eval/11_infer_nyu.sh
-
-# Evaluate predictions
-bash script/eval/12_eval_nyu.sh
-```
-
-Note: although the seed has been set, the results might still be slightly different on different hardware.
-
-## 🏋️ Training
-
-Based on the previously created environment, install extended requirements:
-
-```bash
-pip install -r requirements++.txt -r requirements+.txt -r requirements.txt
-```
-
-Set environment parameters for the data directory:
-
-```bash
-export BASE_DATA_DIR=YOUR_DATA_DIR  # directory of training data
-export BASE_CKPT_DIR=YOUR_CHECKPOINT_DIR  # directory of pretrained checkpoint
-```
-
 Download Stable Diffusion v2 [checkpoint](https://huggingface.co/stabilityai/stable-diffusion-2) into `${BASE_CKPT_DIR}`
 
 Prepare for [Hypersim](https://github.com/apple/ml-hypersim) and [Virtual KITTI 2](https://europe.naverlabs.com/research/computer-vision/proxy-virtual-worlds-vkitti-2/) datasets and save into `${BASE_DATA_DIR}`. Please refer to [this README](script/dataset_preprocess/hypersim/README.md) for Hypersim preprocessing.
@@ -178,31 +99,6 @@ python train.py --config config/train_marigold.yaml
 Resume from a checkpoint, e.g.
 
 ```bash
-python train.py --resume_run output/marigold_base/checkpoint/latest
+python train.py --resume_run output/mwtricgold_base/checkpoint/latest
 ```
 
-Evaluating results
-
-Only the U-Net is updated and saved during training. To use the inference pipeline with your training result, replace `unet` folder in Marigold checkpoints with that in the `checkpoint` output folder. Then refer to [this section](#evaluation) for evaluation.
-
-**Note**: Although random seeds have been set, the training result might be slightly different on different hardwares. It's recommended to train without interruption.
-
-## ✏️ Contributing
-
-Please refer to [this](CONTRIBUTING.md) instruction.
-
-## 🤔 Troubleshooting
-
-| Problem                                                                                                                                      | Solution                                                       |
-|----------------------------------------------------------------------------------------------------------------------------------------------|----------------------------------------------------------------|
-| (Windows) Invalid DOS bash script on WSL                                                                                                     | Run `dos2unix <script_name>` to convert script format          |
-| (Windows) error on WSL: `Could not load library libcudnn_cnn_infer.so.8. Error: libcuda.so: cannot open shared object file: No such file or directory` | Run `export LD_LIBRARY_PATH=/usr/lib/wsl/lib:$LD_LIBRARY_PATH` |
-
-
-## 🎫 License
-
-This work is licensed under the Apache License, Version 2.0 (as defined in the [LICENSE](LICENSE.txt)).
-
-By downloading and using the code and model you agree to the terms in the  [LICENSE](LICENSE.txt).
-
-[![License](https://img.shields.io/badge/License-Apache--2.0-929292)](https://www.apache.org/licenses/LICENSE-2.0)
