@@ -8,7 +8,7 @@ base_config:
 
 
 pipeline:
-  name: MarigoldPipeline
+  name: MetricgoldPipeline
   kwargs:
     scale_invariant: true
     shift_invariant: true
@@ -31,7 +31,7 @@ dataloader:
 
 # Training settings
 trainer:
-  name: MarigoldTrainer
+  name: MetricgoldTrainer
   training_noise_scheduler:
     pretrained_path: stable-diffusion-2
   init_seed: 2024  # use null to train w/o seeding

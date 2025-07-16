@@ -29,7 +29,7 @@ import torch
 from PIL import Image
 from tqdm.auto import tqdm
 
-from marigold import MarigoldPipeline
+from metricgold import MetricgoldPipeline
 import h5py   
 
 import os
@@ -44,12 +44,13 @@ if "__main__" == __name__:
 
     # -------------------- Arguments --------------------
     parser = argparse.ArgumentParser(
-        description="Run single-image depth estimation using Marigold."
+        description="Run single-image depth estimation using Metricgold."
     )
     parser.add_argument(
         "--checkpoint",
         type=str,
-        default="prs-eth/marigold-lcm-v1-0",
+        required=True,
+        # default="prs-eth/marigold-lcm-v1-0",
         help="Checkpoint path or hub name.",
     )
 
@@ -238,7 +239,7 @@ if "__main__" == __name__:
         print(f"Running with full precision ({dtype})")
         variant = None
 
-    pipe: MarigoldPipeline = MarigoldPipeline.from_pretrained(
+    pipe: MetricgoldPipeline = MetricgoldPipeline.from_pretrained(
         checkpoint_path, variant=variant, torch_dtype=dtype
     )
 

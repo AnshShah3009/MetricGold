@@ -93,7 +93,7 @@ Prepare for [Hypersim](https://github.com/apple/ml-hypersim) and [Virtual KITTI 
 Run training script
 
 ```bash
-python train.py --config config/train_marigold.yaml
+python train.py --config config/train_metricgold.yaml
 ```
 
 Resume from a checkpoint, e.g.

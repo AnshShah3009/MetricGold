@@ -40,7 +40,7 @@ from torch.utils.data import DataLoader
 from tqdm import tqdm
 from PIL import Image
 
-from marigold.marigold_pipeline import MarigoldPipeline, MarigoldDepthOutput
+from metricgold.metricgold_pipeline import MetricgoldPipeline, MetricgoldDepthOutput
 from src.util import metric
 from src.util.data_loader import skip_first_batches
 from src.util.logging_util import tb_logger, eval_dic_to_text
@@ -52,11 +52,11 @@ from src.util.alignment import align_depth_least_square
 from src.util.seeding import generate_seed_sequence
 
 
-class MarigoldTrainer:
+class MetricgoldTrainer:
     def __init__(
         self,
         cfg: OmegaConf,
-        model: MarigoldPipeline,
+        model: MetricgoldPipeline,
         train_dataloader: DataLoader,
         device,
         base_ckpt_dir,
@@ -68,7 +68,7 @@ class MarigoldTrainer:
         vis_dataloaders: List[DataLoader] = None,
     ):
         self.cfg: OmegaConf = cfg
-        self.model: MarigoldPipeline = model
+        self.model: MetricgoldPipeline = model
         self.device = device
         self.seed: Union[int, None] = (
             self.cfg.trainer.init_seed
@@ -525,7 +525,7 @@ class MarigoldTrainer:
                 generator.manual_seed(seed)
 
             # Predict depth
-            pipe_out: MarigoldDepthOutput = self.model(
+            pipe_out: MetricgoldDepthOutput = self.model(
                 rgb_int,
                 denoising_steps=self.cfg.validation.denoising_steps,
                 ensemble_size=self.cfg.validation.ensemble_size,

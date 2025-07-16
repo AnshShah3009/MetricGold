@@ -1,11 +1,11 @@
 # Author: Bingxin Ke
 # Last modified: 2024-05-17
 
-from .marigold_trainer import MarigoldTrainer
+from .metricgold_trainer import MetricgoldTrainer
 
 
 trainer_cls_name_dict = {
-    "MarigoldTrainer": MarigoldTrainer,
+    "MetricgoldTrainer": MetricgoldTrainer,
 }
 
 

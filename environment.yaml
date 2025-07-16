@@ -1,4 +1,4 @@
-name: marigold
+name: metricgold
 channels:
   - conda-forge
   - nvidia

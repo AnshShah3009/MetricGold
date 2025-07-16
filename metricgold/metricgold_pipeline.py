@@ -51,9 +51,9 @@ from .util.image_util import (
 import h5py
 
 
-class MarigoldDepthOutput(BaseOutput):
+class MetricgoldDepthOutput(BaseOutput):
     """
-    Output class for Marigold monocular depth prediction pipeline.
+    Output class for Metricgold metric monocular depth prediction pipeline.
 
     Args:
         depth_np (`np.ndarray`):
@@ -70,9 +70,9 @@ class MarigoldDepthOutput(BaseOutput):
     depth_noised: Union[None, np.ndarray]
 
 
-class MarigoldPipeline(DiffusionPipeline):
+class MetricgoldPipeline(DiffusionPipeline):
     """
-    Pipeline for monocular depth estimation using Marigold: https://marigoldmonodepth.github.io.
+    Pipeline for monocular metric depth estimation using MetricGold
 
     This model inherits from [`DiffusionPipeline`]. Check the superclass documentation for the generic methods the
     library implements for all the pipelines (such as downloading or saving, running on a particular device, etc.)
@@ -162,7 +162,7 @@ class MarigoldPipeline(DiffusionPipeline):
         color_map: str = "Spectral",
         show_progress_bar: bool = True,
         ensemble_kwargs: Dict = None,
-    ) -> MarigoldDepthOutput:
+    ) -> MetricgoldDepthOutput:
         """
         Function invoked when calling the pipeline.
 
@@ -171,8 +171,7 @@ class MarigoldPipeline(DiffusionPipeline):
                 Input RGB (or gray-scale) image.
             denoising_steps (`int`, *optional*, defaults to `None`):
                 Number of denoising diffusion steps during inference. The default value `None` results in automatic
-                selection. The number of steps should be at least 10 with the full Marigold models, and between 1 and 4
-                for Marigold-LCM models.
+                selection. The number of steps should be at least 10 with the full Metricgold models, and between 1 and 4
             ensemble_size (`int`, *optional*, defaults to `10`):
                 Number of predictions to be ensembled.
             processing_res (`int`, *optional*, defaults to `None`):
@@ -200,7 +199,7 @@ class MarigoldPipeline(DiffusionPipeline):
             ensemble_kwargs (`dict`, *optional*, defaults to `None`):
                 Arguments for detailed ensembling settings.
         Returns:
-            `MarigoldDepthOutput`: Output class for Marigold monocular depth prediction pipeline, including:
+            `MetricgoldDepthOutput`: Output class for Metricgold monocular depth prediction pipeline, including:
             - **depth_np** (`np.ndarray`) Predicted depth map, with depth values in the range of [0, 1]
             - **depth_colored** (`PIL.Image.Image`) Colorized depth map, with the shape of [3, H, W] and values in [0, 1], None if `color_map` is `None`
             - **uncertainty** (`None` or `np.ndarray`) Uncalibrated uncertainty(MAD, median absolute deviation)
@@ -329,7 +328,7 @@ class MarigoldPipeline(DiffusionPipeline):
         else:
             depth_colored_img = None
 
-        return MarigoldDepthOutput(
+        return MetricgoldDepthOutput(
             depth_np=depth_pred,
             depth_colored=depth_colored_img,
             depth_uncertainity=pred_uncert,

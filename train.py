@@ -32,7 +32,7 @@ from omegaconf import OmegaConf
 from torch.utils.data import ConcatDataset, DataLoader
 from tqdm import tqdm
 
-from marigold.marigold_pipeline import MarigoldPipeline
+from metricgold.metricgold_pipeline import MetricgoldPipeline
 from src.dataset import BaseDepthDataset, DatasetMode, get_dataset
 from src.dataset.mixed_sampler import MixedBatchSampler
 from src.trainer import get_trainer_cls
@@ -63,7 +63,7 @@ if "__main__" == __name__:
     parser.add_argument(
         "--config",
         type=str,
-        default="config/train_marigold.yaml",
+        default="config/train_metricgold.yaml",
         help="Path to config file.",
     )
     parser.add_argument(
@@ -215,7 +215,7 @@ if "__main__" == __name__:
     if is_on_slurm() and (not args.do_not_copy_data):
         # local scratch dir
         original_data_dir = base_data_dir
-        base_data_dir = os.path.join(get_local_scratch_dir(), "Marigold_data")
+        base_data_dir = os.path.join(get_local_scratch_dir(), "Metricgold_data")
         # copy data
         required_data_list = find_value_in_omegaconf("dir", cfg_data)
         # if cfg_train.visualize.init_latent_path is not None:
@@ -322,7 +322,7 @@ if "__main__" == __name__:
 
     # -------------------- Model --------------------
     _pipeline_kwargs = cfg.pipeline.kwargs if cfg.pipeline.kwargs is not None else {}
-    model = MarigoldPipeline.from_pretrained(
+    model = MetricgoldPipeline.from_pretrained(
         os.path.join(base_ckpt_dir, cfg.model.pretrained_path), **_pipeline_kwargs
     )
 

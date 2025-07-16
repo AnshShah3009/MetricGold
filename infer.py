@@ -30,7 +30,7 @@ from PIL import Image
 from torch.utils.data import DataLoader
 from tqdm.auto import tqdm
 
-from marigold import MarigoldPipeline
+from metricgold import MetricgoldPipeline
 from src.util.seeding import seed_all
 from src.dataset import (
     BaseDepthDataset,
@@ -44,12 +44,13 @@ if "__main__" == __name__:
 
     # -------------------- Arguments --------------------
     parser = argparse.ArgumentParser(
-        description="Run single-image depth estimation using Marigold."
+        description="Run single-image depth estimation using Metricgold."
     )
     parser.add_argument(
         "--checkpoint",
         type=str,
-        default="prs-eth/marigold-v1-0",
+        required=True,
+        # default="prs-eth/marigold-v1-0",
         help="Checkpoint path or hub name.",
     )
 
@@ -203,7 +204,7 @@ if "__main__" == __name__:
         dtype = torch.float32
         variant = None
 
-    pipe = MarigoldPipeline.from_pretrained(
+    pipe = MetricgoldPipeline.from_pretrained(
         checkpoint_path, variant=variant, torch_dtype=dtype
     )
 
