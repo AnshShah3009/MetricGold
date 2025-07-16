@@ -79,7 +79,7 @@ The default settings are optimized for the best result. However, the behavior of
 
 ### ⬇ Checkpoint cache
 
-By default, the [checkpoint](https://huggingface.co/prs-eth/marigold-v1-0) is stored in the Hugging Face cache.
+<!-- By default, the [checkpoint](https://huggingface.co/prs-eth/marigold-v1-0) is stored in the Hugging Face cache. -->
 The `HF_HOME` environment variable defines its location and can be overridden, e.g.:
 
 ```bash
@@ -99,6 +99,22 @@ python train.py --config config/train_metricgold.yaml
 Resume from a checkpoint, e.g.
 
 ```bash
-python train.py --resume_run output/mwtricgold_base/checkpoint/latest
+python train.py --resume_run output/metricgold_base/checkpoint/latest
 ```
 
+## 📚 Citation
+
+This project uses the following work:
+
+Ke, B., Obukhov, A., Huang, S., Metzger, N., Daudt, R. C., & Schindler, K. (2024). *Repurposing Diffusion-Based Image Generators for Monocular Depth Estimation*. In Proceedings of the IEEE/CVF Conference on Computer Vision and Pattern Recognition (CVPR), June 2024
+
+BibTeX:
+```bibtex
+@InProceedings{ke2023repurposing,
+  title={Repurposing Diffusion-Based Image Generators for Monocular Depth Estimation},
+  author={Ke, Bingxin and Obukhov, Anton and Huang, Shengyu and Metzger, Nando and Daudt, Rodrigo Caye and Schindler, Konrad},
+  booktitle = {Proceedings of the IEEE/CVF Conference on Computer Vision and Pattern Recognition (CVPR)},
+  year={2024},
+  month={June},
+  pages={XXXX-XXXX}
+}
