@@ -102,7 +102,7 @@ Resume from a checkpoint, e.g.
 python train.py --resume_run output/metricgold_base/checkpoint/latest
 ```
 
-## 📚 Citation
+## Built upon the codebase of MariGold
 
 This project uses the following work:
 
